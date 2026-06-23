@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>praxis · pgvector HNSW index tuning</title>
+<style>
+  :root { color-scheme: light; }
+  body { max-width: 46rem; margin: 3rem auto; padding: 0 1.25rem;
+    font: 17px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #1a1a1a; background: #fff; }
+  h1 { font-size: 1.6rem; line-height: 1.2; }
+  h2 { font-size: 1.15rem; margin-top: 2rem; }
+  code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  pre { background: #f5f5f4; padding: 1rem; border-radius: 8px; overflow-x: auto;
+    font-size: 0.85em; }
+  code { background: #f5f5f4; padding: 0.1em 0.35em; border-radius: 4px; font-size: 0.9em; }
+  .src { color: #555; font-size: 0.85em; }
+  details { background: #f0f7ff; border: 1px solid #cfe3ff; border-radius: 8px;
+    padding: 0.75rem 1rem; margin: 0.75rem 0; }
+  summary { cursor: pointer; font-weight: 600; }
+  .gap { background: #fff7ed; border-left: 3px solid #f59e0b; padding: 0.5rem 1rem; }
+  @media print { details[open] summary ~ * { display: block; } body { margin: 0; } }
+</style>
+</head>
+<body>
+<h1>pgvector: tuning an HNSW index</h1>
+
+<p class="gap"><b>The gap in your repo:</b> <code>pgvector</code> is installed and you
+query embeddings with <code>&lt;-&gt;</code> (<code>search.py:41</code>), but there's
+no ANN index — so every search is a sequential scan.</p>
+
+<h2>The one idea</h2>
+<p>pgvector can answer nearest-neighbour queries two ways. Without an index it does
+an <b>exact</b> scan: compare the query vector to <i>every</i> row. Correct, but
+O(n). An <b>HNSW</b> index (Hierarchical Navigable Small World) trades a little
+recall for a huge speedup — it walks a graph of vectors instead of scanning all of
+them.</p>
+
+<pre>CREATE INDEX ON items USING hnsw (embedding vector_cosine_ops);</pre>
+
+<p>Two knobs set the recall/speed tradeoff: <code>m</code> and
+<code>ef_construction</code> at build time, and <code>hnsw.ef_search</code> at query
+time. Higher <code>ef_search</code> = better recall, slower query.
+<span class="src">Source: pgvector README → Indexing (primary).</span></p>
+
+<h2>Why not just always index?</h2>
+<p>HNSW indexes are expensive to build and take memory. Below a few thousand rows a
+sequential scan is genuinely faster and simpler. The skill matters at scale — which
+is exactly where this repo is heading.</p>
+
+<h2>Recall</h2>
+<details><summary>Why is a query without an ANN index O(n)?</summary>
+It compares the query vector against every row's vector — an exact scan — so cost
+grows linearly with row count.</details>
+
+<details><summary>Which query-time setting trades recall for latency, and which way?</summary>
+<code>hnsw.ef_search</code>. Higher = better recall but slower; lower = faster but
+may miss true neighbours.</details>
+
+<details><summary>When is having NO index the right call?</summary>
+At small row counts (a few thousand), where an exact scan is fast and an HNSW index
+just adds build cost and memory for no real latency win.</details>
+
+<p class="src">Questions you got wrong feed your next praxis warm-up. Ask the agent
+anything here that's unclear — it's your tutor.</p>
+</body>
+</html>

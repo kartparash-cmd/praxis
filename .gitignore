@@ -1,0 +1,18 @@
+# Private overlay — Kay's personal config, project registry, seeded stacks.
+# The skill reads these IF present; they must never enter the public repo.
+.praxis-overlay/
+*.local.md
+*.local.json
+
+# Personal learning workspaces (keep your own under a private path, not here).
+/workspaces/
+
+# Python
+__pycache__/
+*.pyc
+
+# macOS
+.DS_Store
+# macOS Finder/iCloud duplicate-file corruption guard (see Kay's memory):
+*\ 2.md
+*\ 2.json
