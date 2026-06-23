@@ -98,9 +98,11 @@ Project-scoped (`.claude/settings.json` in the workspace, never global), pure-sc
 
 ## v1 scope (ship this) vs deferred
 
-**v1 (build now):** `praxis.py` (full state CLI + events.jsonl) · SKILL.md with **audit** + **teach** (light) · per-directory workspace + format docs · public seed RESOURCES.md · honest README + one hand-verified example workspace · LICENSE.
+**v1 (build now):** `praxis.py` (full state CLI + events.jsonl) · SKILL.md with **audit** + **teach** (light) + **`--deep`** (5-probe checklist) + **execution-grading protocol** (scratch-isolated, skill-authored test, inherits Claude Code approval) · per-directory workspace + format docs · public seed RESOURCES.md · honest README + one hand-verified example workspace · LICENSE.
 
-**Deferred to v1.x / v2 (built, gated, after the core proves out):** `--deep` mastery mode · execution-grading · the SessionStart hook · Anki export. Each is real but is the highest "won't-run-reliably-from-prose" / trust-surface risk — layer them once the core holds over a few weeks.
+**Deferred to v1.x / v2 (built, gated, after the core proves out):** the SessionStart hook (project-scoped, documented but not shipped enabled) · Anki export. Lower-value / higher-friction; layer once the core holds over a few weeks.
+
+> Note: `--deep` and execution-grading were specified into v1 (2026-06-23) rather than left as vague stubs — for a prose skill, "hardening" = writing the bounded, safe protocol the agent follows, which is in SKILL.md. No separate runtime exists to defer.
 
 ## Explicitly OUT
 - No app, no web service, no database (a stdlib CLI over markdown is allowed).

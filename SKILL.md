@@ -117,22 +117,25 @@ Do not skip steps.
 2. Write the next-best lesson candidate to `NOTES.md` under `## Next up`, so the
    next session starts with intent, not deliberation.
 
-## Deep mode (`--deep`) — DEFERRED, gate behind the flag
+## Deep mode (`--deep`)
 
 When the user passes `--deep`, advance only when the concept passes a **discrete
 5-probe checklist** (not a fabricated percentage). Each probe is pass/fail against
 a rubric:
 
 1. **Explain** it plainly in their own words.
-2. **Apply** it to a novel case you invent on the spot.
+2. **Apply** it to a novel case. If the concept is **code-expressible** (a
+   function, query, transformation), grade this probe by EXECUTION — see the
+   protocol below — so "apply" is verified by a running test, not your judgment.
+   If it is not code-expressible (a tradeoff, a design principle), pose a novel
+   scenario and judge the reasoning conversationally.
 3. **Identify** when it does and does NOT apply.
 4. **Critique** an alternative approach.
 5. **Teach it back** as if to a beginner.
 
 Advance only when all 5 pass (state it as "5/5 probes", never "X%"). On a miss,
-re-teach that probe's gap. Mark the record `mastery_level: mastered` (you may set
-this descriptive field; it is not a scheduling field). Keep `--deep` simple until
-the light core has proven out over real use.
+re-teach that probe's gap and re-probe just that one. Mark the record
+`mastery_level: mastered` (a descriptive field; not a scheduling field).
 
 ## First run is the demo
 
@@ -143,12 +146,36 @@ the markdown." Run the full loop (lesson + recall + `praxis record`) so the user
 experiences the wow moment in under a minute, with zero setup. This IS the
 onboarding and the demo.
 
-## Execution-grading — DEFERRED, trust-bounded
+## Execution-grading protocol (deep mode, probe 2 when code-expressible)
 
-When enabled, grade understanding by having the user write a small function/query,
-then run a **skill-authored test** against it (never arbitrary user-typed
-side-effecting code). Always go through Claude Code's normal command-approval
-prompt — never bypass it. Only run code in repos the user trusts.
+Grade "apply" against a running test, not your own judgment. Follow this exactly
+— the bounds are what make it safe to run code on the user's machine.
+
+1. **Scratch isolation.** Create `.praxis-scratch/` in the workspace (gitignored).
+   ALL grading happens there. Never write to, run, or mutate the user's real
+   project files to grade them.
+2. **Author the test FIRST, and show it.** Before the user writes anything, you
+   write a fixed test file with explicit assertions for the one concept, and show
+   it to them. The test is the rubric, visible up front — no moving goalposts.
+3. **User writes only the solution.** They fill in a single scratch solution file
+   (e.g. the function/query under test). You do NOT execute arbitrary commands or
+   shell the user types as "answers" — only the solution file, only via your test.
+4. **Run the test through normal approval.** Execute the skill-authored test
+   against the solution using the project's own test runner or a direct
+   interpreter call, in `.praxis-scratch/`, through Claude Code's standard
+   command-approval prompt. NEVER auto-approve, bypass, or suppress the prompt.
+5. **Result = the probe.** Test passes → probe 2 satisfied. Fails → show the
+   failing assertion, re-teach that gap, let them retry. The interpreter is the
+   ground truth, which is the whole point.
+
+**Hard guardrails — decline and fall back to a conversational "apply" probe if
+any hold:** the concept would require running untrusted, networked, or
+destructive code; the test can't be bounded to `.praxis-scratch/`; or the user is
+in a repo they've said not to trust. A skipped execution probe is fine; an unsafe
+one is not.
+
+**Trust note (state it once per workspace):** this runs code in the user's
+environment. Only proceed in repos they trust.
 
 ## Guardrails
 

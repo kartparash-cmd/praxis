@@ -7,6 +7,9 @@
 # Personal learning workspaces (keep your own under a private path, not here).
 /workspaces/
 
+# Execution-grading scratch — solution/test files written during deep-mode probes.
+.praxis-scratch/
+
 # Python
 __pycache__/
 *.pyc
