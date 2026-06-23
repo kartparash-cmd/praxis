@@ -56,8 +56,32 @@ generic syllabus, never an unverified guess.
    gaps + evidence.
 5. Ask which gap to learn. On their pick → switch to TEACH mode for it.
 
-If you cannot show evidence for any gap, say so and offer topic-driven teaching
-instead. A confident wrong gap is worse than admitting you found none.
+### When the audit finds no gap
+
+Do NOT invent a gap to have something to teach — a confident wrong gap destroys
+trust. Instead, say plainly that you found no evidence-backed gap, then **never
+leave the user at a blank "what do you want to learn?" prompt.** Proactively
+propose 2-3 concrete topics, each one sentence, drawn in this priority order:
+
+1. **From `MISSION.md`** — the "what done looks like" and "starting point" lines
+   name skills the user wants. Suggest the nearest unlearned one.
+2. **From the stack** — pick a non-trivial capability of a dependency that's
+   present in the manifest and central to this codebase (e.g. uses FastAPI →
+   "dependency-injection scopes"; uses pgvector → "cosine vs L2 distance ops").
+   This is teaching the stack, not flagging a defect — so no evidence needed.
+3. **From recent work** — a concept touched by `git log --since` that's worth
+   understanding more deeply.
+
+Skip any topic already mastered in `learning-records/`. Present them as a short
+numbered list and let the user pick or name their own. Example:
+
+> No evidence-backed gap here — the pgvector usage looks sound. Want to go deeper
+> on one of these instead?
+> 1. HNSW vs IVFFlat — when to pick which index
+> 2. FastAPI dependency-injection scopes (you use them in `deps.py`)
+> 3. Something else?
+
+Then switch to TEACH mode for whatever they pick.
 
 ## TEACH mode — the session loop
 
