@@ -406,6 +406,10 @@ def cmd_lint(args):
 
     # Drift detection: stored derived block must equal what events.jsonl implies.
     # This is the schema-drift / hand-edit failure the whole design exists to catch.
+    # NOTE: `due` is intentionally excluded — it is date-relative (a function of
+    # "today", not of the event log), so a record stamped one day legitimately
+    # reads differently the next. It's a cosmetic snapshot recomputed live
+    # everywhere; only the date-invariant fields are true state worth validating.
     records = load_records(records_dir, events_path, today(args))
     for r in records:
         fm = r["fm"]
@@ -413,7 +417,6 @@ def cmd_lint(args):
             "box": str(r["box"]), "streak": str(r["streak"]),
             "last_tested": r["last_tested"] or "never",
             "times_tested": str(r["times_tested"]),
-            "due": "yes" if r["due"] else "no",
         }
         for field, want in recomputed.items():
             if field in fm and fm[field] != want:

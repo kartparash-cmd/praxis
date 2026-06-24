@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "praxis",
+  "version": "0.1.0",
+  "description": "praxis — a repo-auditing tutor skill for Claude Code",
+  "owner": {
+    "name": "Kayden Drew"
+  },
+  "plugins": [
+    {
+      "name": "praxis",
+      "source": "./",
+      "description": "Audit a repo for evidence-backed gaps, then teach you until you own them.",
+      "category": "productivity"
+    }
+  ]
+}

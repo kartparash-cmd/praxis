@@ -4,11 +4,12 @@
 
 A Claude Code skill. The other learning skills teach a syllabus. praxis teaches **your codebase**, and checks you by making you write the fix.
 
-![demo](docs/demo.gif)
+> **30-second demo:** in a repo, run `/praxis` → it surfaces a real gap with `file:line` evidence (e.g. *"pgvector present, no HNSW index — `search.py:41`"*) → you write the fix → a test runs and goes green. That last beat — it ran your code and checked you — is the whole point.
 
-<!-- DEMO GIF must show, in order: (1) a real repo open, (2) /praxis finds a real
-     gap with file:line evidence, (3) user writes the fix, (4) a test runs green.
-     The execution-grading moment is the conversion — do not cut it. -->
+<!-- DEMO GIF goes here once recorded (docs/demo.gif). Must show, in order:
+     (1) a real repo open, (2) /praxis finds a real gap with file:line evidence,
+     (3) user writes the fix, (4) a test runs green. The execution-grading
+     moment is the conversion — do not cut it. -->
 
 ## Why not the other /teach skills
 
@@ -22,8 +23,18 @@ If you just want a tutor for a topic, the others are great. If you want to get p
 
 ## Install
 
+**As a plugin (recommended):**
+
+```
+/plugin marketplace add kartparash-cmd/praxis
+/plugin install praxis@praxis
+```
+
+**Or as a plain skill** (clone and symlink the skill dir):
+
 ```bash
-git clone https://github.com/<you>/praxis.git ~/.claude/skills/praxis
+git clone https://github.com/kartparash-cmd/praxis.git
+ln -s "$PWD/praxis/skills/praxis" ~/.claude/skills/praxis
 ```
 
 Then, in any repo:
@@ -89,11 +100,11 @@ praxis is pull-first — it runs when you invoke it. If you want a nudge when yo
 
 ```json
 { "hooks": { "SessionStart": [ { "hooks": [
-  { "type": "command", "command": "python3 ~/.claude/skills/praxis/praxis.py due --quiet --count" }
+  { "type": "command", "command": "python3 ${CLAUDE_PLUGIN_ROOT}/skills/praxis/praxis.py due --quiet --count" }
 ] } ] } }
 ```
 
-It prints nothing when nothing is due, makes no model/network calls, and no-ops outside a workspace. Off by default on purpose. **Do not install it in your global `~/.claude/settings.json`** — it would fire in every repo.
+(Plain-skill install: point the command at `~/.claude/skills/praxis/praxis.py` instead.) It prints nothing when nothing is due, makes no model/network calls, and no-ops outside a workspace. Off by default on purpose. **Do not install it in your global `~/.claude/settings.json`** — it would fire in every repo.
 </details>
 
 <details>

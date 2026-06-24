@@ -1,0 +1,23 @@
+{
+  "name": "praxis",
+  "version": "0.1.0",
+  "description": "Audit a real codebase for evidence-backed gaps, then teach you until you own them with spaced retrieval.",
+  "author": {
+    "name": "Kayden Drew"
+  },
+  "homepage": "https://github.com/kartparash-cmd/praxis",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kartparash-cmd/praxis.git"
+  },
+  "license": "MIT",
+  "keywords": [
+    "learning",
+    "spaced-repetition",
+    "code-audit",
+    "tutor",
+    "onboarding",
+    "rag",
+    "forward-deployed"
+  ]
+}
